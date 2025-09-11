@@ -168,14 +168,29 @@ print(f'현재 가방 재고 : {Bag.remain_bag()}')
 '''
 class Shop:
     total = 0
-    menu_list = [{ '떡볶이': 3000}, { '순대': 4000 }, { '튀김': 500 }, { '김밥': 2000 }] # dict inside list
+    menu_list = [{ '떡볶이': 3000 }, { '순대': 4000 }, { '튀김': 500 }, { '김밥': 2000 }] # dict inside list
+    menu_dict = {
+        '떡볶이': 3000,
+        '순대': 4000,
+        '튀김': 500,
+        '김밥': 2000,
+    }
 
     @classmethod
-    def sales(cls, menu, count):
-        for menu_item in cls.menu_list:
-            if menu in menu_item: # key 값 확인
-                cls.total += menu_item[menu] * count # dict[key] -> result : value
-                print(f"{menu}을(를) {count}개 판매")
+    def sales(cls, menu_name, quantity):
+        """list 내부의 dictionary를 반복하여 menu_name과 일치하는 key를 찾아 value를 return"""
+        for menu_dict in cls.menu_list:
+            if menu_name in menu_dict: # key 값 확인
+                # in -> element 기준으로 해야 하기 때문에 dictionary의 element 중 'key' 를 기준
+                # 애초에 key 없으면 value를 조회 못하는게 dictionary의 특징 중 하나
+                cls.total += menu_dict[menu_name] * quantity # dict[key] -> result : value
+                print(f"{menu_name}을(를) {quantity}개 판매")
+
+    @classmethod
+    def sales2(cls, menu_name, quantity):
+        if menu_name in cls.menu_dict:
+            cls.total += cls.menu_dict[menu_name] * quantity
+            print(f"{menu_name}을(를) {quantity}개 판매")
 
     @classmethod
     def get_total(self):
@@ -185,6 +200,8 @@ class Shop:
 Shop.sales('떡볶이', 1) # 떡볶이을(를) 1 개 판매
 Shop.sales('김밥', 2)
 Shop.sales('튀김', 5)
+
+Shop.sales2('떡볶이', 1)
 
 print(f'매출 : {Shop.get_total()}원')
 
